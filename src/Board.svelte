@@ -1,13 +1,29 @@
 <script lang="ts">
-    import { ResourceType } from './models/ResourceType';
-    import { TileData } from './models/TileData';
+    import { PlayerColor } from './models/PlayerColor';
 
+    import { ResourceType } from './models/ResourceType';
+    import { RoadData } from './models/RoadData';
+    import { RoadOrientation } from './models/RoadOrientation';
+    import { TileData } from './models/TileData';
+    
+    import Road from './Road.svelte';
     import Tile from './Tile.svelte';
 
     const ROW_LENGTHS = [3, 4, 5, 4, 3];
     
     let boardConfig : TileData[];
-    let counter = 0;
+    let tileCounter = 0;
+
+    let isPlacingRoad = false;
+
+    $: roadConfig = new Array<RoadData>(24).fill(
+        new RoadData(RoadOrientation.Vertical, false, isPlacingRoad)
+    );
+    $: console.log('roadConfig: ' + roadConfig);
+
+    let roadCounter = 0;
+
+    let currentPlayerColor = PlayerColor.None;
 
     initializeBoard();
 
@@ -39,13 +55,22 @@
     }
 
     function initializeBoard() {
-        counter = 0;
+        tileCounter = 0;
         boardConfig = getTileDatas();
+
+        roadCounter = 0;
     }
 
     function getNextTileData() : TileData {
-        const data = boardConfig[counter];
-        counter++;
+        const data = boardConfig[tileCounter];
+        tileCounter++;
+
+        return data;
+    }
+
+    function getNextRoadData() : RoadData {
+        const data = roadConfig[roadCounter];
+        roadCounter++;
 
         return data;
     }
@@ -58,19 +83,37 @@
         }
         return shuffled;
     }
+
+    function startPlaceRoad(playerColor: PlayerColor) {
+        currentPlayerColor = playerColor;
+        isPlacingRoad = true;
+
+        roadConfig = roadConfig;
+
+        console.log(roadConfig);
+    }
 </script>
 
 <div class="tile-rows">
     {#if boardConfig.length != 0}
         {#each ROW_LENGTHS as ROW_LENGTH, _}
             <div class="tile-row">
+                <Road data={getNextRoadData()} />
+
                 {#each Array(ROW_LENGTH) as _}
                     <Tile data={getNextTileData()} />
+
+                    <Road data={getNextRoadData()} />
                 {/each}
             </div>
         {/each}
     {/if}
 </div>
+
+<button class="red-road-btn" on:click={() => startPlaceRoad(PlayerColor.Red)}>Place Red Road</button>
+<button class="blue-road-btn" on:click={() => startPlaceRoad(PlayerColor.Blue)}>Place Blue Road</button>
+<button class="orange-road-btn" on:click={() => startPlaceRoad(PlayerColor.Orange)}>Place Orange Road</button>
+<button class="white-road-btn" on:click={() => startPlaceRoad(PlayerColor.White)}>Place White Road</button>
 
 <style>
     .tile-rows {
@@ -83,6 +126,7 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
+        align-items: center;
     }
 
     .tile-row:not(:nth-of-type(1)) {
