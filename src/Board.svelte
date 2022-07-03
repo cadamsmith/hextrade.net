@@ -5,6 +5,11 @@
     import Tile from './Tile.svelte';
 
     const ROW_LENGTHS = [3, 4, 5, 4, 3];
+    
+    let boardConfig : TileData[];
+    let counter = 0;
+
+    initializeBoard();
 
     function getTileDatas() {
         let scores = [2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12];
@@ -24,21 +29,20 @@
         for (let i = 0; i < resourceTypes.length; i++) {
             tileDatas.push(new TileData(resourceTypes[i], scores[i]));
         }
-        console.log(tileDatas);
 
         let blankTileData = new TileData(ResourceType.None, 0);
         let blankTileIndex = Math.floor(Math.random() * (tileDatas.length + 1));
-        console.log(blankTileIndex);
 
-        tileDatas = [... tileDatas.slice(0, blankTileIndex), blankTileData, ... tileDatas.slice(blankTileIndex)]
-        console.log(tileDatas);
+        tileDatas = [... tileDatas.slice(0, blankTileIndex), blankTileData, ... tileDatas.slice(blankTileIndex)];
 
         return tileDatas;
     }
 
-    let boardConfig = getTileDatas();
+    function initializeBoard() {
+        counter = 0;
+        boardConfig = getTileDatas();
+    }
 
-    let counter = 0;
     function getNextTileData() : TileData {
         const data = boardConfig[counter];
         counter++;
@@ -79,5 +83,9 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
+    }
+
+    .tile-row:not(:nth-of-type(1)) {
+        margin-top: -29px;
     }
 </style>
