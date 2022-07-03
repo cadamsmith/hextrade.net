@@ -17,8 +17,8 @@
             ... new Array(4).fill(ResourceType.Wool),
         ];
 
-        shuffle(scores);
-        shuffle(resourceTypes);
+        scores = shuffle(scores);
+        resourceTypes = shuffle(resourceTypes);
 
         let tileDatas = new Array<TileData>();
         for (let i = 0; i < resourceTypes.length; i++) {
@@ -46,8 +46,13 @@
         return data;
     }
 
-    function shuffle(array: any[]) {
-        array.sort(() => Math.random() - 0.5);
+    function shuffle(array: any[]) : any[] {
+        let shuffled = array;
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
     }
 </script>
 
