@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Tile from './Tile.svelte';
+    import Board from './Board.svelte';
 </script>
 
-<Tile score={10}/>
+<Board />
