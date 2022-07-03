@@ -1,5 +1,5 @@
 <script>
-    export let name;
+    import Tile from './Tile.svelte';
 </script>
 
-<p>Hello {name}!</p>
+<Tile score={10}/>
