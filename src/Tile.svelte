@@ -1,29 +1,32 @@
 <script type="ts">
-    import { ResourceType } from "./models/ResourceType";
-
     import type { TileData } from "./models/TileData";
+    import { ResourceTileType } from "./models/ResourceTileType";
+    import { NonResourceTileType } from "./models/NonResourceTileType";
 
     export let data : TileData;
 
     function getResourceName() : string {
-        switch (data.resourceType)
+        switch (data.tileType)
         {
-            case ResourceType.Brick: {
+            case ResourceTileType.Brick: {
                 return "brick";
             }
-            case ResourceType.Lumber: {
+            case ResourceTileType.Lumber: {
                 return "lumber";
             }
-            case ResourceType.Ore: {
+            case ResourceTileType.Ore: {
                 return "ore";
             }
-            case ResourceType.Grain: {
+            case ResourceTileType.Grain: {
                 return "grain";
             }
-            case ResourceType.Wool: {
+            case ResourceTileType.Wool: {
                 return "wool";
             }
-            case ResourceType.None: {
+            case NonResourceTileType.Desert: {
+                return "desert";
+            }
+            case NonResourceTileType.None: {
                 return "none";
             }
         }
@@ -71,12 +74,20 @@
         background-color: #77B336;
     }
 
-    .none {
+    .desert {
         background-color: #A09055;
     }
 
-    .none > .center-disc {
+    .desert > .center-disc, .none > .center-disc {
         display: none;
+    }
+
+    .water {
+        background-color: #13E5FD;
+    }
+
+    .none {
+        background-color: pink;
     }
 
     .center-disc {
@@ -91,5 +102,7 @@
         border-radius: 50%;
 
         background-color: white;
+
+        user-select: none;
     }
 </style>
