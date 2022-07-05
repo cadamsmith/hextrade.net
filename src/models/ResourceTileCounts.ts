@@ -15,14 +15,13 @@ export class ResourceTileCounts {
         return Object.values(this._data).reduce((a, b) => a + b, 0);
     }
 
-    flatten(): ResourceTileType[] {
-        let flattened: ResourceTileType[] = [];
+    flatten(): string[] {
+        let flattened: string[] = [];
         for (let index of Object.keys(this._data)) {
-            const resourceType : ResourceTileType = parseInt(index);
-            const count = this._data[resourceType];
+            const count = this._data[index];
 
             for (let i = 0; i < count; i++) {
-                flattened.push(resourceType);
+                flattened.push(index);
             }
         }
         

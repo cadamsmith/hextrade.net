@@ -1,4 +1,8 @@
 export enum NonResourceTileType {
-    Desert = 5,
-    None = 6,
+    Desert = "desert",
+    Empty = "empty",
 };
+
+export function getAllNonResourceTileTypes(): NonResourceTileType[] {
+    return Object.values(NonResourceTileType) as NonResourceTileType[];
+}

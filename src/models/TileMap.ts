@@ -22,12 +22,12 @@ export class TileMap {
         let tileDatas = new Array<TileData>();
         for (let i = 0; i < resourceTypes.length; i++) {
             tileDatas.push(
-                new TileData({tileType: resourceTypes[i], score: scores[i], isEditable: true})
+                new TileData({tileType: resourceTypes[i] as TileType, score: scores[i], isEditable: true, isEditing: false})
             );
         }
         for (let i = 0; i < nonResourceTypes.length; i++) {
             tileDatas.push(
-                new TileData({tileType: nonResourceTypes[i], score: 0, isEditable: true})
+                new TileData({tileType: nonResourceTypes[i] as TileType, score: 0, isEditable: true, isEditing: false})
             );
         }
 
@@ -43,7 +43,7 @@ export class TileMap {
 
             if (data[y].length < x) {
                 for (let i = 0; i < x - data[y].length + 1; i++) {
-                    data[y].push(new TileData({tileType: NonResourceTileType.None, score: 0, isEditable: false}));
+                    data[y].push(new TileData({tileType: NonResourceTileType.Empty, score: 0, isEditable: false, isEditing: false}));
                 }
             }
 
@@ -51,11 +51,29 @@ export class TileMap {
                 data[y].push(tileDatas.pop());
             }
             else {
-                data[y].push(new TileData({tileType: NonResourceTileType.None, score: 0, isEditable: true}));
+                data[y].push(new TileData({tileType: NonResourceTileType.Empty, score: 0, isEditable: false, isEditing: false}));
             }
         }
 
         this._data = data;
+    }
+
+    startEditing() {
+        for (let y = 0; y < this._data.length; y++) {
+            for (let x = 0; x < this._data[y].length; x++) {
+                if (this._data[y][x].isEditable) {
+                    this._data[y][x].isEditing = true;
+                }
+            }
+        }
+    }
+
+    stopEditing() {
+        for (let y = 0; y < this._data.length; y++) {
+            for (let x = 0; x < this._data[y].length; x++) {
+                this._data[y][x].isEditing = false;
+            }
+        }
     }
 
     setTileType(x: number, y: number, tileType: TileType) {
@@ -161,7 +179,7 @@ export class TileMapConfig {
 
         const nonResourceTileCounts = new NonResourceTileCounts({
             [NonResourceTileType.Desert] : 1,
-            [NonResourceTileType.None] : 0,
+            [NonResourceTileType.Empty] : 0,
         });
 
         return new TileMapConfig({

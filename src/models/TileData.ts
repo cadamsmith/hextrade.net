@@ -4,20 +4,19 @@ interface TileDataParams {
     tileType: TileType;
     score: number;
     isEditable: boolean;
+    isEditing: boolean;
 }
 
 export class TileData {
     tileType: TileType;
     score: number;
     isEditable: boolean;
+    isEditing: boolean;
     
-    constructor({tileType, score, isEditable}: TileDataParams) {
+    constructor({tileType, score, isEditable, isEditing}: TileDataParams) {
         this.tileType = tileType;
         this.score = score;
         this.isEditable = isEditable;
-    }
-
-    toString(): string {
-        return `${this.tileType} ${this.score} ${this.isEditable}`;
+        this.isEditing = isEditing;
     }
 }

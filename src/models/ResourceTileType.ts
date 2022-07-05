@@ -1,7 +1,11 @@
 export enum ResourceTileType {
-    Brick = 0,
-    Lumber = 1,
-    Ore = 2,
-    Grain = 3,
-    Wool = 4,
+    Brick = "brick",
+    Lumber = "lumber",
+    Ore = "ore",
+    Grain = "grain",
+    Wool = "wool",
+}
+
+export function getAllResourceTileTypes(): ResourceTileType[] {
+    return Object.values(ResourceTileType) as ResourceTileType[];
 }

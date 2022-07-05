@@ -15,14 +15,13 @@ export class NonResourceTileCounts {
         return Object.values(this._data).reduce((a, b) => a + b, 0);
     }
 
-    flatten(): NonResourceTileType[] {
-        let flattened: NonResourceTileType[] = [];
+    flatten(): string[] {
+        let flattened: string[] = [];
         for (let index of Object.keys(this._data)) {
-            const nonResourceTileType : NonResourceTileType = parseInt(index);
-            const count = this._data[nonResourceTileType];
+            const count = this._data[index];
 
             for (let i = 0; i < count; i++) {
-                flattened.push(nonResourceTileType);
+                flattened.push(index);
             }
         }
         

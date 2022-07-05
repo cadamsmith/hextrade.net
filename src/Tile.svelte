@@ -2,46 +2,60 @@
     import type { TileData } from "./models/TileData";
     import { ResourceTileType } from "./models/ResourceTileType";
     import { NonResourceTileType } from "./models/NonResourceTileType";
+    import { getAllTileMarkerNumbers } from './models/DiceRollResult';
+    import { getAllTileTypes } from "./models/TileType";
 
     export let data : TileData;
 
-    function getResourceName() : string {
-        switch (data.tileType)
-        {
-            case ResourceTileType.Brick: {
-                return "brick";
-            }
-            case ResourceTileType.Lumber: {
-                return "lumber";
-            }
-            case ResourceTileType.Ore: {
-                return "ore";
-            }
-            case ResourceTileType.Grain: {
-                return "grain";
-            }
-            case ResourceTileType.Wool: {
-                return "wool";
-            }
-            case NonResourceTileType.Desert: {
-                return "desert";
-            }
-            case NonResourceTileType.None: {
-                return "none";
-            }
+    $: hideTileMarker = data.score == 0
+        || data.tileType == NonResourceTileType.Desert
+        || data.tileType == NonResourceTileType.Empty;
+
+    $: hideEditTileMarker = data.tileType == NonResourceTileType.Desert
+        || data.tileType == NonResourceTileType.Empty;
+
+    let tileMarkerNumbers = getAllTileMarkerNumbers();
+    let tileTypes = getAllTileTypes();
+
+    function handleChangeTileType(event) {
+        const isDesert = event.target.value === NonResourceTileType.Desert;
+        const isNone = event.target.value === NonResourceTileType.Empty;
+
+        if (isDesert || isNone) {
+            data.score = 0;
         }
     }
 </script>
 
-<div class="tile-content {getResourceName()}">
-    <div class="center-disc">
-        <p class="tile-score">{data.score}</p>
-    </div>
+<div class="tile-content {data.tileType}">
+        {#if data.isEditing}
+            <select bind:value={data.tileType} on:input={handleChangeTileType}>
+                {#each tileTypes as tileType}
+                    <option value={tileType}>{tileType}</option>
+                {/each}
+            </select>
+
+            {#if !hideEditTileMarker}
+                <select bind:value={data.score}>
+                    <option value="0">none</option>
+                    {#each tileMarkerNumbers as tileMarkerNumber}
+                        <option value={tileMarkerNumber}>{tileMarkerNumber}</option>
+                    {/each}
+                </select>
+            {/if}
+        {:else}
+            {#if !hideTileMarker}
+                <div class="center-disc">
+                    <p class="tile-score">{data.score}</p>
+                </div>
+            {/if}
+        {/if}
 </div>
 
 <style>
     .tile-content {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
 
@@ -86,8 +100,8 @@
         background-color: #13E5FD;
     }
 
-    .none {
-        background-color: pink;
+    .empty {
+        background-color: transparent;
     }
 
     .center-disc {
