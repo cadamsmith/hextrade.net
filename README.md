@@ -3,6 +3,10 @@
 This is eventually going to be a fully playable Catan clone.
 Right now, I am focusing on getting the basics working - styling, some reactivity, etc.
 
+## Live Site
+
+The live site is hosted on Netlify currently at www.hextrade.xyz.
+
 ## How to Run This App
 
 1. Clone the repo
