@@ -4,7 +4,6 @@
     import type { TileData } from './models/TileData';
 
     export let tileMap : TileData[][];
-    $: console.log(tileMap);
 </script>
 
 <div class="tile-rows">
