@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { PlayerColor } from './models/PlayerColor';
-    import { TileType } from './models/TileType';
     import { RoadData } from './models/RoadData';
     import { RoadOrientation } from './models/RoadOrientation';
     import { TileData } from './models/TileData';
-    
+    import { ResourceTileType } from './models/ResourceTileType';
+    import { NonResourceTileType } from './models/NonResourceTileType';
+
     import Road from './Road.svelte';
     import Tile from './Tile.svelte';
 
@@ -22,19 +22,17 @@
 
     let roadCounter = 0;
 
-    let currentPlayerColor = PlayerColor.None;
-
     initializeBoard();
 
     function getTileDatas() {
         let scores = [2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12];
 
         let resourceTypes = [
-            ... new Array(3).fill(TileType.Brick),
-            ... new Array(4).fill(TileType.Lumber),
-            ... new Array(3).fill(TileType.Ore),
-            ... new Array(4).fill(TileType.Grain),
-            ... new Array(4).fill(TileType.Wool),
+            ... new Array(3).fill(ResourceTileType.Brick),
+            ... new Array(4).fill(ResourceTileType.Lumber),
+            ... new Array(3).fill(ResourceTileType.Ore),
+            ... new Array(4).fill(ResourceTileType.Grain),
+            ... new Array(4).fill(ResourceTileType.Wool),
         ];
 
         scores = shuffle(scores);
@@ -42,10 +40,10 @@
 
         let tileDatas = new Array<TileData>();
         for (let i = 0; i < resourceTypes.length; i++) {
-            tileDatas.push(new TileData(resourceTypes[i], scores[i]));
+            tileDatas.push(new TileData({tileType: resourceTypes[i], score: scores[i], isEditable: false, isEditing: false}));
         }
 
-        let blankTileData = new TileData(TileType.None, 0);
+        let blankTileData = new TileData({tileType: NonResourceTileType.Empty, score: 0, isEditable: false, isEditing: false});
         let blankTileIndex = Math.floor(Math.random() * (tileDatas.length + 1));
 
         tileDatas = [... tileDatas.slice(0, blankTileIndex), blankTileData, ... tileDatas.slice(blankTileIndex)];
@@ -82,15 +80,6 @@
         }
         return shuffled;
     }
-
-    function startPlaceRoad(playerColor: PlayerColor) {
-        currentPlayerColor = playerColor;
-        isPlacingRoad = true;
-
-        roadConfig = roadConfig;
-
-        console.log(roadConfig);
-    }
 </script>
 
 <div class="tile-rows">
@@ -108,11 +97,6 @@
         {/each}
     {/if}
 </div>
-
-<button class="red-road-btn" on:click={() => startPlaceRoad(PlayerColor.Red)}>Place Red Road</button>
-<button class="blue-road-btn" on:click={() => startPlaceRoad(PlayerColor.Blue)}>Place Blue Road</button>
-<button class="orange-road-btn" on:click={() => startPlaceRoad(PlayerColor.Orange)}>Place Orange Road</button>
-<button class="white-road-btn" on:click={() => startPlaceRoad(PlayerColor.White)}>Place White Road</button>
 
 <style>
     .tile-rows {

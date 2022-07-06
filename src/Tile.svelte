@@ -1,6 +1,5 @@
 <script type="ts">
     import type { TileData } from "./models/TileData";
-    import { ResourceTileType } from "./models/ResourceTileType";
     import { NonResourceTileType } from "./models/NonResourceTileType";
     import { getAllTileMarkerNumbers } from './models/DiceRollResult';
     import { getAllTileTypes } from "./models/TileType";
@@ -17,9 +16,11 @@
     let tileMarkerNumbers = getAllTileMarkerNumbers();
     let tileTypes = getAllTileTypes();
 
-    function handleChangeTileType(event) {
-        const isDesert = event.target.value === NonResourceTileType.Desert;
-        const isNone = event.target.value === NonResourceTileType.Empty;
+    function handleChangeTileType(event: Event) {
+        const select = event.target as HTMLSelectElement;
+
+        const isDesert = select.value === NonResourceTileType.Desert;
+        const isNone = select.value === NonResourceTileType.Empty;
 
         if (isDesert || isNone) {
             data.score = 0;

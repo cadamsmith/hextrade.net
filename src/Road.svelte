@@ -1,7 +1,5 @@
 
 <script lang="ts">
-import { PlayerColor } from "./models/PlayerColor";
-
     import type { RoadData } from "./models/RoadData";
     import { RoadOrientation } from "./models/RoadOrientation";
 
@@ -18,27 +16,6 @@ import { PlayerColor } from "./models/PlayerColor";
             }
             case RoadOrientation.NegativeIncline: {
                 return "negative-incline";
-            }
-        }
-    }
-
-    function getPlayerColor() : string {
-        switch (data.playerColor)
-        {
-            case PlayerColor.Red: {
-                return "red";
-            }
-            case PlayerColor.Blue: {
-                return "blue";
-            }
-            case PlayerColor.Orange: {
-                return "orange";
-            }
-            case PlayerColor.White: {
-                return "white";
-            }
-            case PlayerColor.None: {
-                return "";
             }
         }
     }
