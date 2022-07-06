@@ -40,6 +40,6 @@
     }
 
     .action-btn {
-        width: 75px;
+        width: 80px;
     }
 </style>
