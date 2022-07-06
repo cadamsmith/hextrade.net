@@ -38,7 +38,7 @@
 
             {#if !hideEditTileMarker}
                 <select bind:value={data.score}>
-                    <option value="0">none</option>
+                    <option value={0}>none</option>
                     {#each tileMarkerNumbers as tileMarkerNumber}
                         <option value={tileMarkerNumber}>{tileMarkerNumber}</option>
                     {/each}
