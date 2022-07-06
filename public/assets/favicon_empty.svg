@@ -1,0 +1,9 @@
+<svg id="favicon" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+    <style>
+        polygon {
+            fill: transparent;
+        }
+    </style>
+    
+    <polygon points="25.045,128 256,0 486.955,128 486.955,384 256,512 25.045,384 "/>
+</svg>
