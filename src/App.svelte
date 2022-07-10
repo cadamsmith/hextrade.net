@@ -4,36 +4,35 @@
     import {TileMap, TileMapConfig} from './models/TileMap';
 
     let map = new TileMap(TileMapConfig.fromClassicBoard());
-    $: tileDatas = map.getData();
 
     let isInEditMode = false;
 
     function editBoard() {
         isInEditMode = true;
         map.startEditing();
-        updateTileMap();
+        refreshTiles();
     }
 
     function finishEditBoard() {
         isInEditMode = false;
         map.stopEditing();
-        updateTileMap();
+        refreshTiles();
     }
 
     function randomizeBoard() {
         isInEditMode = false;
         map = new TileMap(TileMapConfig.fromClassicBoard());
-        updateTileMap();
+        refreshTiles();
     }
 
     // have to do this because array reactivity is weird in Svelte
-    function updateTileMap() {
-        tileDatas = tileDatas;
+    function refreshTiles() {
+        map._data = map._data;
     }
 </script>
 
 <section>
-    <Board tileMap={tileDatas} />
+    <Board tileMap={map} />
 
     <div>
         {#if isInEditMode}

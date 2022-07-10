@@ -1,13 +1,15 @@
 <script lang="ts">
     import Tile from './Tile.svelte';
 
-    import type { TileData } from './models/TileData';
+    import type { TileMap } from './models/TileMap';
 
-    export let tileMap : TileData[][];
+    export let tileMap : TileMap;
+    $: console.log(tileMap);
+    $: console.log(tileMap.isFirstRowLeftJustified);
 </script>
 
-<div class="tile-rows">
-    {#each tileMap as tileRow}
+<div class="tile-rows {tileMap.isFirstRowLeftJustified ? 'tabbed-even-rows' : 'tabbed-odd-rows'}">
+    {#each tileMap._data as tileRow}
         <div class="tile-row">
             {#each tileRow as tileData}
                 <Tile data={tileData} />
@@ -28,7 +30,11 @@
         display: flex;
     }
 
-    .tile-row:nth-of-type(2n - 1) {
+    .tile-rows.tabbed-odd-rows > .tile-row:nth-of-type(2n - 1) {
+        margin-left: 50px;
+    }
+
+    .tile-rows.tabbed-even-rows > .tile-row:nth-of-type(2n) {
         margin-left: 50px;
     }
 

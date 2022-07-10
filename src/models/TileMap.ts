@@ -10,6 +10,7 @@ import { NonResourceTileCounts } from "./NonResourceTileCounts";
 
 export class TileMap {
     _data: TileData[][];
+    isFirstRowLeftJustified: boolean;
 
     constructor(config: TileMapConfig) {
         let scores = config.resourceTileScoreCounts.flatten();
@@ -56,6 +57,7 @@ export class TileMap {
         }
 
         this._data = data;
+        this.isFirstRowLeftJustified = config.isFirstRowLeftJustified;
     }
 
     startEditing() {
@@ -97,6 +99,8 @@ interface TileMapConfigParams {
     resourceTileScoreCounts: ResourceTileScoreCounts;
 
     nonResourceTileCounts: NonResourceTileCounts;
+
+    isFirstRowLeftJustified: boolean;
 }
 
 export class TileMapConfig {
@@ -107,7 +111,9 @@ export class TileMapConfig {
     
     readonly nonResourceTileCounts: NonResourceTileCounts;
 
-    constructor({gameTilePositions, expansionTilePositions, resourceTileCounts, resourceTileScoreCounts, nonResourceTileCounts} : TileMapConfigParams) {
+    readonly isFirstRowLeftJustified: boolean;
+
+    constructor({gameTilePositions, expansionTilePositions, resourceTileCounts, resourceTileScoreCounts, nonResourceTileCounts, isFirstRowLeftJustified} : TileMapConfigParams) {
         const boardTilePositionCount = gameTilePositions.flat().length;
         
         const resourceTileCount = resourceTileCounts.totalCount();
@@ -135,6 +141,8 @@ export class TileMapConfig {
         this.resourceTileScoreCounts = resourceTileScoreCounts;
 
         this.nonResourceTileCounts = nonResourceTileCounts;
+
+        this.isFirstRowLeftJustified = isFirstRowLeftJustified;
     }
 
     public static fromClassicBoard(): TileMapConfig {
@@ -187,7 +195,8 @@ export class TileMapConfig {
             expansionTilePositions,
             resourceTileCounts,
             resourceTileScoreCounts,
-            nonResourceTileCounts
+            nonResourceTileCounts,
+            isFirstRowLeftJustified: false,
         });
     }
 }
