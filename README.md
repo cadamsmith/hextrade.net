@@ -1,17 +1,17 @@
-# hextrade.xyz
+# hextrade.net
 
 This is eventually going to be a fully playable Catan clone.
 Right now, I am focusing on getting the basics working - styling, some reactivity, etc.
 
 ## Live Site
 
-The live site is hosted on Netlify currently at www.hextrade.xyz.
+The live site is hosted on Netlify currently at www.hextrade.net.
 
 ## How to Run This App
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/cadamsmith/hextrade.xyz.git
+   git clone https://github.com/cadamsmith/hextrade.net.git
    ```
 2. If either nodeJS / npm are not installed, follow the necessary steps to do so:
 
