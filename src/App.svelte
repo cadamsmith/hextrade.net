@@ -1,9 +1,10 @@
 <script lang="ts">
     import Board from './Board.svelte';
 
-    import {TileMap, TileMapConfig} from './models/TileMap';
+    import {TileMapConfig} from './models/TileMap/TileMapConfig';
+    import {TileMap} from './models/TileMap/TileMap';
 
-    let map = new TileMap(TileMapConfig.fromClassicBoard());
+    let map = new TileMap(TileMapConfig.fromSmallestBoard());
 
     let isInEditMode = false;
 
