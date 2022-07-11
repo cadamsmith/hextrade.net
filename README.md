@@ -3,6 +3,8 @@
 This is eventually going to be a fully playable Catan clone.
 Right now, I am focusing on getting the basics working - styling, some reactivity, etc.
 
+![catan_board](https://user-images.githubusercontent.com/41703860/178271199-037c896f-c530-4401-9bbb-31315499b945.png)
+
 ## Live Site
 
 The live site is hosted on Netlify currently at www.hextrade.net.
