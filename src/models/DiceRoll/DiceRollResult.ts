@@ -5,6 +5,6 @@ export function getAllDiceRollResults(): number[] {
     return diceRollResults;
 }
 
-export function getAllTileMarkerNumbers(): number[] {
+export function getAllTileScoreOptions(): number[] {
     return diceRollResults.filter(r => r != 7);
 }

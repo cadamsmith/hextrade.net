@@ -1,37 +1,42 @@
 <script type="ts">
-    import type { TileData } from "./models/TileData";
-    import { NonResourceTileType } from "./models/NonResourceTileType";
-    import { getAllTileMarkerNumbers } from './models/DiceRollResult';
-    import { getAllTileTypes } from "./models/TileType";
+    import { createEventDispatcher } from 'svelte';
+    import type { TileData } from "./models/Tile/TileData";
+    import { NonBoardTileType } from "./models/Tile/TileType";
+    import { getAllTileScoreOptions } from './models/DiceRoll/DiceRollResult';
+    import { getAllBoardTileTypes } from "./models/Tile/TileType";
 
     export let data : TileData;
 
-    $: hideTileMarker = data.score == 0
-        || data.tileType == NonResourceTileType.Desert
-        || data.tileType == NonResourceTileType.Empty;
+    $: isBoardTileType = data.tileType != NonBoardTileType.Void;
 
-    $: hideEditTileMarker = data.tileType == NonResourceTileType.Desert
-        || data.tileType == NonResourceTileType.Empty;
+    $: hideTileMarker = data.score == 0|| !isBoardTileType;
 
-    let tileMarkerNumbers = getAllTileMarkerNumbers();
-    let tileTypes = getAllTileTypes();
+    $: hideEditTileMarker = !isBoardTileType;
 
-    function handleChangeTileType(event: Event) {
-        const select = event.target as HTMLSelectElement;
+    $: isAddingToBoard = data ? false : false;
 
-        const isDesert = select.value === NonResourceTileType.Desert;
-        const isNone = select.value === NonResourceTileType.Empty;
+    let tileScoreOptions = getAllTileScoreOptions();
+    let tileTypeOptions = getAllBoardTileTypes();
 
-        if (isDesert || isNone) {
-            data.score = 0;
-        }
+    const dispatch = createEventDispatcher();
+
+    function openAddToBoardDialog() {
+        isAddingToBoard = true;
     }
+
+    function handleAddToBoard() {
+        dispatch('addToBoard', {
+            position: data.position,
+        });
+    }
+
 </script>
 
 <div class="tile-content {data.tileType}">
+    {#if isBoardTileType}
         {#if data.isEditing}
-            <select bind:value={data.tileType} on:input={handleChangeTileType}>
-                {#each tileTypes as tileType}
+            <select bind:value={data.tileType}>
+                {#each tileTypeOptions as tileType}
                     <option value={tileType}>{tileType}</option>
                 {/each}
             </select>
@@ -39,7 +44,7 @@
             {#if !hideEditTileMarker}
                 <select bind:value={data.score}>
                     <option value={0}>none</option>
-                    {#each tileMarkerNumbers as tileMarkerNumber}
+                    {#each tileScoreOptions as tileMarkerNumber}
                         <option value={tileMarkerNumber}>{tileMarkerNumber}</option>
                     {/each}
                 </select>
@@ -51,6 +56,21 @@
                 </div>
             {/if}
         {/if}
+    {:else}
+        {#if data.isEditing}
+            {#if !isAddingToBoard}
+                <button class="add-board-tile-btn" on:click={openAddToBoardDialog}>➕</button>
+            {:else}
+                <select bind:value={data.tileType} on:change={handleAddToBoard}>
+                    {#each tileTypeOptions as tileType}
+                        <option value={tileType}>{tileType}</option>
+                    {/each}
+                </select>
+            {/if}
+        {/if}
+    {/if}
+
+    <p class="position-text">r{data.position.x} c{data.position.y}</p>
 </div>
 
 <style>
@@ -67,6 +87,13 @@
         clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
         
         background-color: red;
+
+        position: relative;
+    }
+
+    .position-text {
+        position: absolute;
+        bottom: 0;
     }
 
     .brick {
@@ -93,7 +120,7 @@
         background-color: #A09055;
     }
 
-    .desert > .center-disc, .none > .center-disc {
+    .desert > .center-disc {
         display: none;
     }
 
@@ -101,8 +128,8 @@
         background-color: #13E5FD;
     }
 
-    .empty {
-        background-color: transparent;
+    .void {
+        background-color: pink;
     }
 
     .center-disc {

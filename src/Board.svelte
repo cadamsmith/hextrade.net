@@ -1,18 +1,32 @@
 <script lang="ts">
     import Tile from './Tile.svelte';
 
-    import type { TileMap } from './models/TileMap';
+    import type { TileMap } from './models/TileMap/TileMap';
+    import { TileRowIndentationScheme } from './models/TileMap/TileRowIndentationScheme';
 
     export let tileMap : TileMap;
-    $: console.log(tileMap);
-    $: console.log(tileMap.isFirstRowLeftJustified);
+
+    $: indentationClass = tileMap.tileRowIndentationScheme == TileRowIndentationScheme.Even
+        ? 'tabbed-even-rows'
+        : 'tabbed-odd-rows';
+
+    function handleAddToBoard(event: CustomEvent) {
+        console.log(event.detail.position);
+        tileMap.handleAddTile(event.detail.position);
+        refreshTiles();
+    }
+
+    function refreshTiles() {
+        tileMap._data = tileMap._data;
+    }
+    
 </script>
 
-<div class="tile-rows {tileMap.isFirstRowLeftJustified ? 'tabbed-even-rows' : 'tabbed-odd-rows'}">
+<div class="tile-rows {indentationClass}">
     {#each tileMap._data as tileRow}
         <div class="tile-row">
             {#each tileRow as tileData}
-                <Tile data={tileData} />
+                <Tile on:addToBoard={handleAddToBoard} data={tileData} />
             {/each}
         </div>
     {/each}
