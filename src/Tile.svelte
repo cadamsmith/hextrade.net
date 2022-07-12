@@ -13,16 +13,10 @@
 
     $: hideEditTileMarker = !isBoardTileType;
 
-    $: isAddingToBoard = data ? false : false;
-
     let tileScoreOptions = getAllTileScoreOptions();
     let tileTypeOptions = getAllBoardTileTypes();
 
     const dispatch = createEventDispatcher();
-
-    function openAddToBoardDialog() {
-        isAddingToBoard = true;
-    }
 
     function handleAddToBoard() {
         dispatch('addToBoard', {
@@ -32,7 +26,7 @@
 
 </script>
 
-<div class="tile-content {data.tileType}">
+<div class="tile-content {data.tileType} class:editing={data.isEditing}">
     {#if isBoardTileType}
         {#if data.isEditing}
             <select bind:value={data.tileType}>
@@ -58,15 +52,11 @@
         {/if}
     {:else}
         {#if data.isEditing}
-            {#if !isAddingToBoard}
-                <button class="add-board-tile-btn" on:click={openAddToBoardDialog}>➕</button>
-            {:else}
-                <select bind:value={data.tileType} on:change={handleAddToBoard}>
-                    {#each tileTypeOptions as tileType}
-                        <option value={tileType}>{tileType}</option>
-                    {/each}
-                </select>
-            {/if}
+            <select bind:value={data.tileType} on:change={handleAddToBoard}>
+                {#each tileTypeOptions as tileType}
+                    <option value={tileType}>{tileType}</option>
+                {/each}
+            </select>
         {/if}
     {/if}
 
@@ -94,6 +84,7 @@
     .position-text {
         position: absolute;
         bottom: 0;
+        display: none;
     }
 
     .brick {
@@ -129,7 +120,7 @@
     }
 
     .void {
-        background-color: pink;
+        background-color: transparent;
     }
 
     .center-disc {
