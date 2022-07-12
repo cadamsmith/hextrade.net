@@ -4,7 +4,7 @@
     import {TileMapConfig} from './models/TileMap/TileMapConfig';
     import {TileMap} from './models/TileMap/TileMap';
 
-    let map = new TileMap(TileMapConfig.fromSmallestBoard());
+    let map = new TileMap(TileMapConfig.fromClassicBoard());
 
     let isInEditMode = false;
 

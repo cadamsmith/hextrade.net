@@ -106,7 +106,7 @@ export class TileMap {
             neighbors.push([x - 1, y - 1], [x + 1, y - 1]);
         }
 
-        return neighbors;
+        return neighbors.sort(([x1, y1], [x2, y2]) => x1 - x2 || y1 - y2);
     }
 
     swapIndentationScheme() {
@@ -118,68 +118,63 @@ export class TileMap {
         }
     }
 
+    shiftDown() {
+        for (let i = 0; i < this._data.length; i++) {
+            for (let j = 0; j < this._data[i].length; j++) {
+                this._data[i][j].position.update(i + 1, j);
+            }
+        }
+
+        const newTopRow : TileData[] = [];
+        this._data.unshift(newTopRow);
+    }
+
+    expandDown() {
+        const newBottomRow : TileData[] = [];
+        this._data.push(newBottomRow);
+    }
+
+    shiftRight() {
+        for (let i = 0; i < this._data.length; i++) {
+            for (let j = 0; j < this._data[i].length; j++) {
+                this._data[i][j].position.update(i, j + 1);
+            }
+
+            const position = new TilePosition(i, 0, false);
+            this._data[i].unshift(new TileData(NonBoardTileType.Void, 0, position, false));
+        }
+    }
+
     handleAddTile(position: TilePosition) {
         let [x, y] = position.getCoordinates();
 
         this._data[x][y].position.addToBoard();
 
-        if (y == 0) {
-            for (let i = 0; i < this._data.length; i++) {
-                for (let j = 0; j < this._data[i].length; j++) {
-                    this._data[i][j].position.update(i, j + 1);
-                }
+        if (x == 0) {
+            this.swapIndentationScheme();
 
-                const position = new TilePosition(i, 0, false);
-                this._data[i].unshift(new TileData(NonBoardTileType.Void, 0, position, false));
-            }
+            this.shiftDown();
+
+            x++;
+        }
+        if (y == 0) {
+            this.shiftRight();
 
             y++;
         }
-
-        if (x == 0) {
-            for (let i = 0; i < this._data.length; i++) {
-                for (let j = 0; j < this._data[i].length; j++) {
-                    this._data[i][j].position.update(i + 1, j);
-                }
-            }
-
-            const newTopRow = new Array<TileData>(y + 1);
-            for (let i = 0; i < newTopRow.length; i++) {
-                const position = new TilePosition(0, i, false);
-                
-                newTopRow[i] = new TileData(NonBoardTileType.Void, 0, position, false);
-            }
-            this._data.unshift(newTopRow);
-
-            x++;
-
-            this.swapIndentationScheme();
-        }
-
         if (x == this._data.length - 1) {
-            
-            const newBottomRow = new Array<TileData>(y + 1);
-            for (let i = 0; i < newBottomRow.length; i++) {
-                const position = new TilePosition(x + 1, i, false);
-                
-                newBottomRow[i] = new TileData(NonBoardTileType.Void, 0, position, false);
-            }
-
-            this._data.push(newBottomRow);
+            this.expandDown();
         }
 
-        if (y == this._data[x].length - 1) {
-            const position = new TilePosition(x, y + 1, false);
-            this._data[x].push(new TileData(NonBoardTileType.Void, 0, position, false));
-        }
-
-        const neighbors = this.getNeighbors(position);
-        console.log(neighbors);
+        const neighbors = this.getNeighbors(new TilePosition(x, y, true));
 
         for (let [x, y] of neighbors) {
-            if (y > this._data[x].length - 1 ) {
-                const position = new TilePosition(x, y, false);
-                this._data[x].push(new TileData(NonBoardTileType.Void, 0, position, false));
+            const rowLength = this._data[x].length;
+            for (let i = rowLength; i <= y; i++) {
+                const position = new TilePosition(x, i, false);
+                const tileData = new TileData(NonBoardTileType.Void, 0, position, false);
+
+                this._data[x].push(tileData);
             }
 
             this._data[x][y].isEditable = true;
